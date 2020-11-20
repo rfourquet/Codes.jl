@@ -1,0 +1,18 @@
+name = "Codes"
+uuid = "05c2c7d8-8f45-4d06-aa23-d3773ac4f9ea"
+authors = ["Rafael Fourquet <fourquet.rafael@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+AbstractAlgebra = "c3fe647b-3220-5bb0-a1ea-a7954cac585d"
+
+[compat]
+AbstractAlgebra = "0.11"
+ReTest = "0.1"
+julia = "1"
+
+[extras]
+ReTest = "e0db7c4e-2690-44b9-bad6-7687da720f89"
+
+[targets]
+test = ["ReTest"]
