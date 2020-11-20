@@ -1,7 +1,8 @@
 module Codes
 
 export Code, LinearCode, RepetitionCode,
-       blocklength, dimension
+       blocklength, dimension,
+       encode
 
 
 abstract type Code{F} end
@@ -23,6 +24,37 @@ function blocklength end
 Return the dimension of code `c`.
 """
 function dimension end
+
+"""
+    encode(c::Code, message)
+
+Encode `message`, which must be a vector (or row-vector) of length
+matching `dimension(c)`.
+"""
+function encode end
+
+## utils
+
+function check_parent(c::Code, x)
+    base_field(c) == parent(x) || throw(ArgumentError("incompatible fields"))
+    nothing
+end
+
+
+vecsimilar(x, m) = _vecsimilar(x, size(x), m)
+
+_vecsimilar(x, (n,)::NTuple{1}, m) = similar(x, m)
+_vecsimilar(x, (n, m0)::NTuple{2}, m) = similar(x, _check_one(n), m)
+
+function _check_one(n)
+    isone(n) || throw(ArgumentError("expected a 1-dimensional vector"))
+    n
+end
+
+veclen(x) = _veclen(size(x))
+
+_veclen((n,)::NTuple{1}) = n
+_veclen((n, m)::NTuple{2}) = (_check_one(n); m)
 
 
 ## includes
