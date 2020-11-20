@@ -18,3 +18,21 @@ function encode(code::RepetitionCode, message)
     end
     codeword
 end
+
+function decode(code::RepetitionCode, word)
+    F = base_field(code)
+    if order(F) == 2
+        n0 = count(iszero, word)
+        n1 = blocklength(code) - n0
+        x = n0 < n1 ? one(F) : zero(F)
+    else
+        counts = Dict{elem_type(F), Int}()
+        for x in word
+            counts[x] = 1 + get(counts, x, 0)
+        end
+        x = argmax(counts) # undefined result in case of tie
+    end
+    message = vecsimilar(word, 1)
+    message[1, 1] = x
+    message
+end

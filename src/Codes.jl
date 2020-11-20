@@ -2,8 +2,9 @@ module Codes
 
 export Code, LinearCode, RepetitionCode,
        blocklength, dimension,
-       encode
+       encode, decode
 
+using AbstractAlgebra: order, elem_type
 
 abstract type Code{F} end
 
@@ -32,6 +33,15 @@ Encode `message`, which must be a vector (or row-vector) of length
 matching `dimension(c)`.
 """
 function encode end
+
+"""
+    decode(c::Code, word)
+
+Decode `word`, which must be a vector (or row-vector) of length
+matching `blocklength(c)`.
+"""
+function decode end
+
 
 ## utils
 
