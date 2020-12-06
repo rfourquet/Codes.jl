@@ -18,3 +18,8 @@ generator_matrix(c::GeneratorCode) = c.genmat
 
 blocklength(c::GeneratorCode) = ncols(generator_matrix(c))
 dimension(c::GeneratorCode) = nrows(generator_matrix(c))
+
+function encode(code::GeneratorCode, msg)
+    # should column vectors be accepted (and automatically transposed) ?
+    msg * generator_matrix(code)
+end
