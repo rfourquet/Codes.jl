@@ -2,6 +2,7 @@
     G = GF(3)
     C = RepetitionCode(G, 5)
 
+    @test base_field(C) === G
     @test blocklength(C) == 5
     @test dimension(C) == 1
 end

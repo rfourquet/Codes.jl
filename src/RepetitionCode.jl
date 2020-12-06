@@ -5,7 +5,6 @@ end
 
 blocklength(c::RepetitionCode) = c.len
 dimension(c::RepetitionCode) = 1
-base_field(c::RepetitionCode) = c.field
 
 function encode(code::RepetitionCode, message)
     n = veclen(message)
