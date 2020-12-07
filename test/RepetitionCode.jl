@@ -5,11 +5,13 @@
     @test base_field(C) === G
     @test blocklength(C) == 5
     @test dimension(C) == 1
+    @test generator_matrix(C) == G[1 1 1 1 1]
 end
 
 @testset "RepetitionCode:encode" begin
     G = GF(2)
     C = RepetitionCode(G, 3)
+    L = LinearCode(G, generator_matrix(C))
 
     m = [G(1)]
     w = encode(C, m)
@@ -20,6 +22,10 @@ end
     w = encode(C, m)
     @test w isa Generic.MatSpaceElem{elem_type(G)}
     @test w == G[0 0 0]
+    @test w == encode(L, m)
+
+    m = G[1;]
+    @test encode(C, m) == encode(L, m)
 
     m = G[0 1]
     @test_throws ArgumentError encode(C, m)

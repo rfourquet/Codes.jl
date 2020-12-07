@@ -6,6 +6,9 @@ end
 blocklength(c::RepetitionCode) = c.len
 dimension(c::RepetitionCode) = 1
 
+generator_matrix(c::RepetitionCode) =
+    matrix(base_field(c), fill(one(base_field(c)), 1, blocklength(c)))
+
 function encode(code::RepetitionCode, message)
     n = veclen(message)
     n == 1 || throw(ArgumentError("message length ($n) does not match code dimension (1)"))
