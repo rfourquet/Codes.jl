@@ -2,16 +2,21 @@
     F = GF(3)
     G = F[0 1 2;
           1 1 0]
-    C = GeneratorCode(F, G)
+    for C = (GeneratorCode(F, G),
+             LinearCode(F, G))
 
-    @test base_field(C) === F
-    @test generator_matrix(C) === G
-    @test check_matrix(C) == F[2 1 1]'
-    @test dimension(C) == 2
-    @test blocklength(C) == 3
+        @test base_field(C) === F
+        @test generator_matrix(C) === G
+        @test check_matrix(C) == F[2 1 1]'
+        @test dimension(C) == 2
+        @test blocklength(C) == 3
+    end
 
-    D = GeneratorCode(F, check_matrix=F[2 1 1]')
-    @test rref(generator_matrix(D)) == rref(G)
+    for D = (GeneratorCode(F, check_matrix=F[2 1 1]'),
+             LinearCode(F, check_matrix=F[2 1 1]'))
+
+        @test rref(generator_matrix(D)) == rref(G)
+    end
 
     H = F[1 1 0;
           2 0 1]'

@@ -1,3 +1,5 @@
+abstract type LinearCode{F} <: Code{F} end
+
 """
     generator_matrix(c::LinearCode)
 
@@ -15,3 +17,8 @@ function check_matrix end
 
 # default fallback
 base_field(c::LinearCode) = c.field
+
+# LinearCode constructor falls back on GeneratorCode
+
+LinearCode(field, genmat::MatrixElem) = GeneratorCode(field, genmat)
+LinearCode(field; check_matrix::MatrixElem) = GeneratorCode(field; check_matrix)

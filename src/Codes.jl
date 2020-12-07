@@ -8,7 +8,6 @@ using AbstractAlgebra: AbstractAlgebra, order, elem_type, right_kernel, left_ker
 
 abstract type Code{F} end
 
-abstract type LinearCode{F} <: Code{F} end
 
 ## generic functions
 
