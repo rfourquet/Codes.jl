@@ -28,6 +28,13 @@
     @test blocklength(E) == 3
 end
 
+@testset "GeneratorCode: iteration" begin
+    F = GF(2)
+    H = F[1 0 1 0; 1 1 0 1]'
+    C = LinearCode(F, check_matrix=H)
+    @test collect(C) == [F[0 0 0 0], F[1 1 1 0], F[0 1 0 1], F[1 0 1 1]]
+end
+
 @testset "GeneratorCode: encode" begin
     F = GF(3)
     G = F[0 1 2;

@@ -6,6 +6,7 @@
     @test blocklength(C) == 5
     @test dimension(C) == 1
     @test generator_matrix(C) == G[1 1 1 1 1]
+    @test collect(C) == [G[0 0 0 0 0], G[1 1 1 1 1], G[2 2 2 2 2]]
 
     F = GF(2)
     C = RepetitionCode(F, 5)
@@ -17,6 +18,8 @@
                                       1 0 1 0 0;
                                       1 0 0 1 0;
                                       1 0 0 0 1]
+
+    @test collect(C) == [F[0 0 0 0 0], F[1 1 1 1 1]]
 end
 
 @testset "RepetitionCode:encode" begin

@@ -8,6 +8,13 @@ Ambient space of messages that can be encoded.
 message_space(c::LinearCode) = MatrixSpace(base_field(c), 1, dimension(c))
 
 """
+    ambient_space(c::LinearCode)
+
+Ambient space of codewords in `c`.
+"""
+ambient_space(c::LinearCode) = MatrixSpace(base_field(c), 1, blocklength(c))
+
+"""
     generator_matrix(c::LinearCode)
 
 Return the generator matrix of code `c`.
@@ -51,3 +58,23 @@ function Base.show(io::IO, c::LinearCode)
     codename = nameof(typeof(c))
     println(io, "[$n, $k] $codename over $(base_field(c))")
 end
+
+## iteration
+
+function Base.iterate(c::LinearCode, state = nothing)
+    if state === nothing
+        msg_it = iterator(message_space(c))
+        msg_msg_st = iterate(msg_it)
+    else
+        msg_it, msg_st = state
+        msg_msg_st = iterate(msg_it, msg_st)
+    end
+    msg_msg_st === nothing && return nothing
+    msg, msg_st = msg_msg_st
+    encode(c, msg), (msg_it, msg_st)
+end
+
+# number of codewords (TODO: check overflow)
+Base.length(c::LinearCode) = order(base_field(c))^dimension(c)
+
+Base.eltype(c::LinearCode) = elem_type(ambient_space(c))

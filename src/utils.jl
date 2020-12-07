@@ -24,3 +24,50 @@ const MatrixElem = Union{AbstractMatrix,AbstractAlgebra.MatrixElem}
 # TODO: move these methods to AbstractAlgebra.jl and import nrows/ncols from it
 nrows(a::MatrixElem) = size(a, 1)
 ncols(a::MatrixElem) = size(a, 2)
+
+nrows(m::AbstractAlgebra.MatSpace) = AbstractAlgebra.nrows(m)
+ncols(m::AbstractAlgebra.MatSpace) = AbstractAlgebra.ncols(m)
+
+## iteration
+
+### AA galois fields
+
+struct FinFieldIterator{F}
+    f::F
+    n::Int
+end
+
+iterator(f::AbstractAlgebra.FinField) = FinFieldIterator(f, order(f))
+
+Base.length(f::FinFieldIterator) = f.n
+Base.eltype(f::FinFieldIterator) = elem_type(f.f)
+
+function Base.iterate(f::FinFieldIterator, state=0)
+    state == order(f.f) && return nothing
+    f.f(state), state+1
+end
+
+### AA matrices
+
+# TODO: compile-inefficient as it's based on Iterators.product, and overflow unchecked
+
+struct MatSpaceIterator{M,I}
+    m::M
+    iters::I
+end
+
+function iterator(m::AbstractAlgebra.MatSpace)
+    F = base_ring(m)
+    MatSpaceIterator(m,
+                     Iterators.product(iterator.(fill(F, nrows(m), ncols(m)))...))
+end
+
+Base.length(m::MatSpaceIterator) = length(iterator(base_ring(m.m)))^(nrows(m.m) * ncols(m.m))
+Base.eltype(m::MatSpaceIterator) = elem_type(m.m)
+
+function Base.iterate(m::MatSpaceIterator, state...)
+    iters = iterate(m.iters, state...)
+    iters === nothing && return nothing
+    iters, state = iters
+    m.m(collect(iters)), state
+end

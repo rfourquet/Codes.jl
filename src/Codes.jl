@@ -5,7 +5,7 @@ export Code, GeneratorCode, LinearCode, RepetitionCode,
        encode, decode, base_field, message_space
 
 using AbstractAlgebra: AbstractAlgebra, order, elem_type, right_kernel, left_kernel, rref,
-      matrix, MatrixSpace
+      matrix, MatrixSpace, base_ring
 
 abstract type Code{F} end
 
