@@ -8,6 +8,9 @@ export Code, GeneratorCode, LinearCode, RepetitionCode, ParityCheckCode,
 using AbstractAlgebra: AbstractAlgebra, order, elem_type, right_kernel, left_kernel, rref,
       matrix, MatrixSpace, base_ring, diagonal_matrix
 
+using InlineTest
+
+
 abstract type Code{F} end
 
 

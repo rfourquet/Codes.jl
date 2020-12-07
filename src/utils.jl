@@ -28,6 +28,26 @@ ncols(a::MatrixElem) = size(a, 2)
 nrows(m::AbstractAlgebra.MatSpace) = AbstractAlgebra.nrows(m)
 ncols(m::AbstractAlgebra.MatSpace) = AbstractAlgebra.ncols(m)
 
+## vectors
+
+"""
+    hamming_weight(x)
+
+Return the Hamming weight of vector `x`, i.e. the number of its non-zero coordinates.
+"""
+hamming_weight(x) = count(!iszero, x)
+
+@testset "hamming_weight" begin
+    F = AbstractAlgebra.GF(2)
+    x = F[0 0 1 1 0 1]
+    @test hamming_weight(x) == 3
+    F = AbstractAlgebra.GF(3)
+    x = F[0 1 2 2 2]
+    @test hamming_weight(x) == 4
+    @test hamming_weight(Matrix(x)) == 4
+end
+
+
 ## iteration
 
 ### AA galois fields
