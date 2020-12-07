@@ -91,6 +91,10 @@ Base.length(c::LinearCode) = order(base_field(c))^dimension(c)
 
 Base.eltype(c::LinearCode) = elem_type(ambient_space(c))
 
+## minimum distance
+
+minimum_distance(c::LinearCode) = minimum(hamming_weight, Iterators.filter(!iszero, c))
+
 
 ## NearestNeighborDecoder
 

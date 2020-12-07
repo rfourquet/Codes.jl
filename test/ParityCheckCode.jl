@@ -3,6 +3,7 @@
     C = ParityCheckCode(F, 3)
     @test blocklength(C) == 4
     @test dimension(C) == 3
+    @test minimum_distance(C) == 2
 
     G = F[1 0 0 2
           0 1 0 2

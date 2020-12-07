@@ -12,6 +12,7 @@
         @test parity_check_matrix(C) == F[2 1 1]
         @test dimension(C) == 2
         @test blocklength(C) == 3
+        @test minimum_distance(C) == 2
     end
 
     for D = (GeneratorCode(F, check_matrix=F[2 1 1]'),
@@ -27,6 +28,7 @@
     @test check_matrix(E) === H
     @test dimension(E) == 1
     @test blocklength(E) == 3
+    @test minimum_distance(E) == 3
 end
 
 @testset "GeneratorCode: iteration" begin
