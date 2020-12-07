@@ -33,7 +33,7 @@ end
     G = F[0 1 2;
           1 1 0]
     C = GeneratorCode(F, G)
-    M = MatrixSpace(F, 1, 2) # message space
+    M = message_space(C)
 
     @test encode(C, F[0 0]) == F[0 0 0]
     @test encode(C, F[1 2]) == F[2 0 2]

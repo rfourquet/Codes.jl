@@ -1,6 +1,13 @@
 abstract type LinearCode{F} <: Code{F} end
 
 """
+    message_space(c::LinearCode)
+
+Ambient space of messages that can be encoded.
+"""
+message_space(c::LinearCode) = MatrixSpace(base_field(c), 1, dimension(c))
+
+"""
     generator_matrix(c::LinearCode)
 
 Return the generator matrix of code `c`.
