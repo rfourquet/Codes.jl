@@ -8,6 +8,15 @@ Return the generator matrix of code `c`.
 function generator_matrix end
 
 """
+    parity_check_matrix(c::LinearCode)
+
+Return the parity check matrix `H` of `c`,
+such that `iszero(generator_matrix(c) * H')`.
+"""
+parity_check_matrix(c::LinearCode) = transpose(check_matrix(c))
+# TODO: make it lazy via LinearAlgebra.Transpose
+
+"""
     check_matrix(c::LinearCode)
 
 Return the transposed `H` of the parity check matrix of `c`,

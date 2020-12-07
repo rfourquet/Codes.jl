@@ -8,6 +8,7 @@
         @test base_field(C) === F
         @test generator_matrix(C) === G
         @test check_matrix(C) == F[2 1 1]'
+        @test parity_check_matrix(C) == F[2 1 1]
         @test dimension(C) == 2
         @test blocklength(C) == 3
     end

@@ -13,6 +13,10 @@
                                1 0 1 0 0;
                                1 0 0 1 0;
                                1 0 0 0 1]'
+    @test parity_check_matrix(C) == F[1 1 0 0 0;
+                                      1 0 1 0 0;
+                                      1 0 0 1 0;
+                                      1 0 0 0 1]
 end
 
 @testset "RepetitionCode:encode" begin

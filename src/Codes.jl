@@ -1,7 +1,7 @@
 module Codes
 
 export Code, GeneratorCode, LinearCode, RepetitionCode,
-       blocklength, dimension, generator_matrix, check_matrix,
+       blocklength, dimension, generator_matrix, check_matrix, parity_check_matrix,
        encode, decode, base_field
 
 using AbstractAlgebra: AbstractAlgebra, order, elem_type, right_kernel, left_kernel, rref,
