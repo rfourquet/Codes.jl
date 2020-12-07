@@ -9,6 +9,8 @@ dimension(c::RepetitionCode) = 1
 generator_matrix(c::RepetitionCode) =
     matrix(base_field(c), fill(one(base_field(c)), 1, blocklength(c)))
 
+systematic_generator_matrix(c::RepetitionCode) = generator_matrix(c)
+
 function encode(code::RepetitionCode, message)
     n = veclen(message)
     n == 1 || throw(ArgumentError("message length ($n) does not match code dimension (1)"))

@@ -21,6 +21,18 @@ Return the generator matrix of code `c`.
 """
 function generator_matrix end
 
+""" systematic_generator_matrix(c::LinearCode)
+
+Return a systematic generator matrix of code `c`, which contain
+a set of columns forming the identity matrix.
+"""
+function systematic_generator_matrix(c::LinearCode)
+    G = generator_matrix(c)
+    k, S = rref(G)
+    @assert k == dimension(c)
+    S
+end
+
 """
     parity_check_matrix(c::LinearCode)
 

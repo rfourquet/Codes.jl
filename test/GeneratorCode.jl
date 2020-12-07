@@ -7,6 +7,7 @@
 
         @test base_field(C) === F
         @test generator_matrix(C) === G
+        @test systematic_generator_matrix(C) == F[1 0 1; 0 1 2]
         @test check_matrix(C) == F[2 1 1]'
         @test parity_check_matrix(C) == F[2 1 1]
         @test dimension(C) == 2
@@ -16,7 +17,7 @@
     for D = (GeneratorCode(F, check_matrix=F[2 1 1]'),
              LinearCode(F, check_matrix=F[2 1 1]'))
 
-        @test rref(generator_matrix(D)) == rref(G)
+        @test rref(generator_matrix(D)) == rref(G) == (2, F[1 0 1; 0 1 2])
     end
 
     H = F[1 1 0;

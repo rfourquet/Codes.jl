@@ -6,6 +6,7 @@
     @test blocklength(C) == 5
     @test dimension(C) == 1
     @test generator_matrix(C) == G[1 1 1 1 1]
+    @test systematic_generator_matrix(C) == G[1 1 1 1 1]
     @test collect(C) == [G[0 0 0 0 0], G[1 1 1 1 1], G[2 2 2 2 2]]
 
     F = GF(2)
