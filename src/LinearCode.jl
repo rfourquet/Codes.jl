@@ -13,7 +13,11 @@ function generator_matrix end
 Return the transposed `H` of the parity check matrix of `c`,
 such that `iszero(generator_matrix(c) * H)`.
 """
-function check_matrix end
+function check_matrix(c::LinearCode)
+    k, checkmat = right_kernel(generator_matrix(c))
+    @assert k + dimension(c) == blocklength(c)
+    checkmat
+end
 
 # default fallback
 base_field(c::LinearCode) = c.field

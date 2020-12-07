@@ -27,9 +27,7 @@ generator_matrix(c::GeneratorCode) = c.genmat
 # transposed of parity check matrix
 function check_matrix(c::GeneratorCode)
     if c.checkmat === nothing
-        k, checkmat = right_kernel(generator_matrix(c))
-        @assert k + dimension(c) == blocklength(c)
-        c.checkmat = checkmat
+        c.checkmat = invoke(check_matrix, Tuple{LinearCode}, c)
     end
     c.checkmat
 end
