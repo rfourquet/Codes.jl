@@ -1,12 +1,12 @@
 module Codes
 
-export Code, GeneratorCode, LinearCode, RepetitionCode,
+export Code, GeneratorCode, LinearCode, RepetitionCode, ParityCheckCode,
        blocklength, dimension,
        generator_matrix, systematic_generator_matrix, check_matrix, parity_check_matrix,
        encode, decode, base_field, message_space
 
 using AbstractAlgebra: AbstractAlgebra, order, elem_type, right_kernel, left_kernel, rref,
-      matrix, MatrixSpace, base_ring
+      matrix, MatrixSpace, base_ring, diagonal_matrix
 
 abstract type Code{F} end
 
@@ -50,5 +50,6 @@ include("utils.jl")
 include("LinearCode.jl")
 include("GeneratorCode.jl")
 include("RepetitionCode.jl")
+include("ParityCheckCode.jl")
 
 end # module

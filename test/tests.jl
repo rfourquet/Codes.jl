@@ -8,5 +8,6 @@ using AbstractAlgebra
 
 include("GeneratorCode.jl")
 include("RepetitionCode.jl")
+include("ParityCheckCode.jl")
 
 end
