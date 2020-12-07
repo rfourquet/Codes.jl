@@ -31,7 +31,16 @@ end
 # default fallback
 base_field(c::LinearCode) = c.field
 
-# LinearCode constructor falls back on GeneratorCode
+## LinearCode constructor falls back on GeneratorCode
 
 LinearCode(field, genmat::MatrixElem) = GeneratorCode(field, genmat)
 LinearCode(field; check_matrix::MatrixElem) = GeneratorCode(field; check_matrix)
+
+## IO
+
+function Base.show(io::IO, c::LinearCode)
+    n = blocklength(c)
+    k = dimension(c)
+    codename = nameof(typeof(c))
+    println(io, "[$n, $k] $codename over $(base_field(c))")
+end
