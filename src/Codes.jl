@@ -4,7 +4,7 @@ export Code, GeneratorCode, LinearCode, RepetitionCode,
        blocklength, dimension, generator_matrix, check_matrix,
        encode, decode, base_field
 
-using AbstractAlgebra: AbstractAlgebra, order, elem_type, right_kernel
+using AbstractAlgebra: AbstractAlgebra, order, elem_type, right_kernel, left_kernel, rref
 
 abstract type Code{F} end
 

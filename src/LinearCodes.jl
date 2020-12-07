@@ -21,6 +21,14 @@ end
 GeneratorCode(field::F, genmat::M) where {F,M<:MatrixElem} =
     GeneratorCode{F,M}(field, genmat)
 
+function GeneratorCode(field; check_matrix::MatrixElem)
+    k, genmat = left_kernel(check_matrix)
+    code = GeneratorCode(field, genmat)
+    code.checkmat = check_matrix
+    @assert k == dimension(code)
+    code
+end
+
 blocklength(c::GeneratorCode) = ncols(generator_matrix(c))
 dimension(c::GeneratorCode) = nrows(generator_matrix(c))
 
