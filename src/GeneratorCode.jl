@@ -1,13 +1,3 @@
-"""
-    generator_matrix(c::Code)
-
-Return the generator matrix of code `c`.
-"""
-function generator_matrix end
-
-# default fallback
-base_field(c::LinearCode) = c.field
-
 # based on generator matrix
 mutable struct GeneratorCode{F,M<:MatrixElem} <: LinearCode{F}
     field::F

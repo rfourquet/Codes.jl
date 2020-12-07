@@ -74,6 +74,7 @@ ncols(a::MatrixElem) = size(a, 2)
 
 ## includes
 
+include("LinearCode.jl")
 include("GeneratorCode.jl")
 include("RepetitionCode.jl")
 
