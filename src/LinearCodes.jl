@@ -23,3 +23,15 @@ function encode(code::GeneratorCode, msg)
     # should column vectors be accepted (and automatically transposed) ?
     msg * generator_matrix(code)
 end
+
+
+# based on parity check matrix
+struct CheckCode{F,M<:MatrixElem} <: LinearCode{F}
+    field::F
+    checkmat::M
+end
+
+check_matrix(c::CheckCode) = c.checkmat
+
+blocklength(c::CheckCode) = ncols(check_matrix(c))
+dimension(c::CheckCode) = blocklength(c) - nrows(check_matrix(c))
