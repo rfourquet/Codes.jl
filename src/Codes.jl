@@ -1,10 +1,10 @@
 module Codes
 
-export Code, CheckCode, GeneratorCode, LinearCode, RepetitionCode,
+export Code, GeneratorCode, LinearCode, RepetitionCode,
        blocklength, dimension, generator_matrix, check_matrix,
        encode, decode, base_field
 
-using AbstractAlgebra: AbstractAlgebra, order, elem_type
+using AbstractAlgebra: AbstractAlgebra, order, elem_type, right_kernel
 
 abstract type Code{F} end
 
