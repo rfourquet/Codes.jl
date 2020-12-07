@@ -47,6 +47,25 @@ hamming_weight(x) = count(!iszero, x)
     @test hamming_weight(Matrix(x)) == 4
 end
 
+"""
+    hamming_distance(x, y)
+
+Return the Hamming distance between vectors `x` and `y`, i.e. the number of coordinates
+where they differ.
+"""
+hamming_distance(x, y) = count(xy -> xy[1] != xy[2], zip(x, y))
+
+@testset "hamming_distance" begin
+    F = AbstractAlgebra.GF(2)
+    @test hamming_distance(F[0 0 1 1 0 1],
+                           F[0 1 1 0 0 1]) == 2
+    F = AbstractAlgebra.GF(3)
+    x = F[0 1 2 2 2]
+    y = F[0 2 2 1 0]
+    @test hamming_distance(x, y) == 3
+    @test hamming_distance(Matrix(x), Matrix(y)) == 3
+end
+
 
 ## iteration
 
