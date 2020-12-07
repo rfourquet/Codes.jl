@@ -1,6 +1,7 @@
 module Codes
 
 export Code, GeneratorCode, LinearCode, RepetitionCode, ParityCheckCode,
+       NearestNeighborDecoder,
        blocklength, dimension,
        generator_matrix, systematic_generator_matrix, check_matrix, parity_check_matrix,
        encode, decode, base_field, message_space
@@ -12,6 +13,13 @@ using InlineTest
 
 
 abstract type Code{F} end
+
+abstract type Decoder end
+abstract type DecoderToCode <: Decoder end
+abstract type DecoderToMessage <: Decoder end
+
+# fall-back
+code(dec::Decoder) = dec.code
 
 
 ## generic functions

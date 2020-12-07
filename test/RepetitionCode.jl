@@ -52,17 +52,21 @@ end
 @testset "RepetitionCode:decode" begin
     G = GF(2)
     C = RepetitionCode(G, 3)
+    dec = NearestNeighborDecoder(C)
 
     for (O, I) in ((zero(G), one(G)), (one(G), zero(G)))
         for w0 in ([O O O], [O O I], [O I O], [I O O])
             for (w, m) in (w0 => fill(O, 1, 1), matrix(G, w0) => G[O;])
                 @test decode(C, w) == m
+                # TODO: use decode_to_message when this exists
+                @test all(==(m[1, 1]), decode(dec, w))
             end
         end
     end
 
     G = GF(3)
     C = RepetitionCode(G, 3)
+    dec = NearestNeighborDecoder(C)
     a, b, c = G.(0:2)
 
     for (x, y, z) in ((a, b, c), (a, c, b), (b, a, c), (b, c, a), (c, a, b), (c, b, a))
@@ -71,6 +75,7 @@ end
                    [y x x], [z x x])
             for (w, m) in (w0 => fill(x, 1, 1), matrix(G, w0) => G[x;])
                 @test decode(C, w) == m
+                @test all(==(m[1, 1]), decode(dec, w))
             end
         end
     end

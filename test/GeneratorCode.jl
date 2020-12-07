@@ -55,3 +55,30 @@ end
         @test iszero(encode(D, rand(M)) * check_matrix(D))
     end
 end
+
+@testset "GeneratorCode: decode" begin
+    for F = (GF(2), GF(3))
+        G = F[0 0 0 1 1 1 1;
+              0 1 1 0 0 1 1;
+              1 0 1 0 1 0 1]
+        C = LinearCode(F, G) # [4-7]-HammingCode
+        dec = NearestNeighborDecoder(C)
+        for _=1:5
+            msg = rand(message_space(C))
+            cw = encode(C, msg)
+            # 1 error
+            for pos = 1:blocklength(C)
+                word = copy(cw)
+                word[1, pos] += F(1)
+                @test decode(dec, word) == cw
+                word[1, pos] += F(1)
+                @test decode(dec, word) == cw
+                if order(F) == 3
+                    word[1, pos] += F(1)
+                    @test decode(dec, word) == cw
+                end
+                @test word == cw # in any case
+            end
+        end
+    end
+end

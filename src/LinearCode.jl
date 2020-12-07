@@ -90,3 +90,24 @@ end
 Base.length(c::LinearCode) = order(base_field(c))^dimension(c)
 
 Base.eltype(c::LinearCode) = elem_type(ambient_space(c))
+
+
+## NearestNeighborDecoder
+
+struct NearestNeighborDecoder{C<:LinearCode} <: DecoderToCode
+    code::C
+end
+
+function decode(dec::NearestNeighborDecoder, word)
+    # TODO: assert "small" code
+    dmin = typemax(Int)
+    local nearest::elem_type(ambient_space(code(dec)))
+    for cw in code(dec)
+        d = hamming_distance(word, cw)
+        if d < dmin
+            nearest = cw
+            dmin = d
+        end
+    end
+    nearest
+end
