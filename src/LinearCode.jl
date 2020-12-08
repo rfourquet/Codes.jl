@@ -107,10 +107,10 @@ maybe_minimum_distance(c::LinearCode) = isdefined(c, :mindist) ? c.mindist : not
 
 ## params
 
-function params(c::LinearCode)
+function params(c::LinearCode, force_distmin=false)
     n = blocklength(c)
     k = dimension(c)
-    d = maybe_minimum_distance(c)
+    d = force_distmin ? minimum_distance(c) : maybe_minimum_distance(c)
     d === nothing ? [n, k] : [n, k, d]
 end
 
