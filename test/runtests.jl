@@ -1,4 +1,4 @@
 using ReTest
 
 include("tests.jl")
-CodesTests.runtests()
+retest(CodesTests, CodesTests.Codes)
