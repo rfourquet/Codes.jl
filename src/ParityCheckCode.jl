@@ -5,6 +5,7 @@ end
 
 blocklength(c::ParityCheckCode) = c.dim + 1
 dimension(c::ParityCheckCode) = c.dim
+maybe_minimum_distance(::ParityCheckCode) = 2
 
 function generator_matrix(c::ParityCheckCode)
     m = diagonal_matrix(one(base_field(c)), dimension(c), blocklength(c))

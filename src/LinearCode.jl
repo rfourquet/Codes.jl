@@ -93,19 +93,16 @@ Base.eltype(c::LinearCode) = elem_type(ambient_space(c))
 ## minimum distance
 
 function minimum_distance(c::LinearCode)
-    md() = minimum(hamming_weight, Iterators.filter(!iszero, c))
+    md = maybe_minimum_distance(c)
+    md === nothing || return md
+    md = minimum(hamming_weight, Iterators.filter(!iszero, c))
     if isdefined(c, :mindist)
-        if c.mindist !== nothing
-            c.mindist
-        else
-            c.mindist = md()
-        end
-    else
-        md()
+        c.mindist = md
     end
+    md
 end
 
-maybe_minimium_distance(c::LinearCode) = isdefined(c, :mindist) ? c.mindist : nothing
+maybe_minimum_distance(c::LinearCode) = isdefined(c, :mindist) ? c.mindist : nothing
 
 
 ## params
@@ -113,7 +110,7 @@ maybe_minimium_distance(c::LinearCode) = isdefined(c, :mindist) ? c.mindist : no
 function params(c::LinearCode)
     n = blocklength(c)
     k = dimension(c)
-    d = maybe_minimium_distance(c)
+    d = maybe_minimum_distance(c)
     d === nothing ? [n, k] : [n, k, d]
 end
 

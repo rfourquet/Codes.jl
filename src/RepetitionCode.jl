@@ -5,6 +5,7 @@ end
 
 blocklength(c::RepetitionCode) = c.len
 dimension(c::RepetitionCode) = 1
+maybe_minimum_distance(c::RepetitionCode) = blocklength(c)
 
 generator_matrix(c::RepetitionCode) =
     matrix(base_field(c), fill(one(base_field(c)), 1, blocklength(c)))
