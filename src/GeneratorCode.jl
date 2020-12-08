@@ -3,9 +3,10 @@ mutable struct GeneratorCode{F,M<:MatrixElem} <: LinearCode{F}
     field::F
     genmat::M
     checkmat::Union{M,Nothing}
+    mindist::Union{Int,Nothing}
 
     GeneratorCode{F,M}(field::F, genmat::M) where {F,M<:MatrixElem} =
-        new{F,M}(field, genmat, nothing)
+        new{F,M}(field, genmat, nothing, nothing)
 end
 
 GeneratorCode(field::F, genmat::M) where {F,M<:MatrixElem} =

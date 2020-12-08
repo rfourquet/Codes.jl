@@ -65,10 +65,9 @@ LinearCode(field; check_matrix::MatrixElem) = GeneratorCode(field; check_matrix)
 ## IO
 
 function Base.show(io::IO, c::LinearCode)
-    n = blocklength(c)
-    k = dimension(c)
+    nkd = params(c)
     codename = nameof(typeof(c))
-    println(io, "[$n, $k] $codename over $(base_field(c))")
+    println(io, "$nkd $codename over $(base_field(c))")
 end
 
 ## iteration
@@ -93,7 +92,30 @@ Base.eltype(c::LinearCode) = elem_type(ambient_space(c))
 
 ## minimum distance
 
-minimum_distance(c::LinearCode) = minimum(hamming_weight, Iterators.filter(!iszero, c))
+function minimum_distance(c::LinearCode)
+    md() = minimum(hamming_weight, Iterators.filter(!iszero, c))
+    if isdefined(c, :mindist)
+        if c.mindist !== nothing
+            c.mindist
+        else
+            c.mindist = md()
+        end
+    else
+        md()
+    end
+end
+
+maybe_minimium_distance(c::LinearCode) = isdefined(c, :mindist) ? c.mindist : nothing
+
+
+## params
+
+function params(c::LinearCode)
+    n = blocklength(c)
+    k = dimension(c)
+    d = maybe_minimium_distance(c)
+    d === nothing ? [n, k] : [n, k, d]
+end
 
 
 ## NearestNeighborDecoder
