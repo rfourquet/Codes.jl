@@ -1,3 +1,5 @@
+argerror(err::String) = throw(ArgumentError(err))
+
 function check_parent(c::Code, x)
     base_field(c) == parent(x) || throw(ArgumentError("incompatible fields"))
     nothing

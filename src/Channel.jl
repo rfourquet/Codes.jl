@@ -46,3 +46,19 @@ function transmit!(chan::ErrorChannel, cw)
 end
 
 transmit(chan::ErrorChannel, cw) = transmit!(chan, copy(cw))
+
+
+##############################################################################
+
+struct SymmetricChannel{RNG<:Union{AbstractRNG,Nothing}} <: AbstractChannel
+    perr::Float64
+    rng::RNG
+
+    function SymmetricChannel(perr::Float64; rng::Union{AbstractRNG,Nothing}=nothing)
+        0 <= perr <= 1.0 ||
+            argerror("error probability `perr` must satisfy `0 <= perr <= 1` (got $perr)")
+        new{typeof(rng)}(perr, rng)
+    end
+end
+
+error_probability(chan::SymmetricChannel) = chan.perr

@@ -1,3 +1,10 @@
+@testset "Channel: basics" begin
+    chan = SymmetricChannel(.3)
+    @test error_probability(chan) == 0.3
+    @test_throws ArgumentError SymmetricChannel(-0.1)
+    @test_throws ArgumentError SymmetricChannel(1.1)
+end
+
 @testset "ErrorChannel: transmit" begin
     for F = (GF(2), GF(5))
         dim = rand(1:9)
