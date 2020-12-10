@@ -70,7 +70,8 @@ end
               0 1 1 0 0 1 1;
               1 0 1 0 1 0 1]
         C = LinearCode(F, G) # [4-7]-HammingCode
-        dec = NearestNeighborDecoder(C)
+        ndec = NearestNeighborDecoder(C)
+        sdec = SyndromeDecoder(C, 1)
         for _=1:5
             msg = rand(message_space(C))
             cw = encode(C, msg)
@@ -78,12 +79,15 @@ end
             for pos = 1:blocklength(C)
                 word = copy(cw)
                 word[1, pos] += F(1)
-                @test decode(dec, word) == cw
+                @test decode(ndec, word) == cw
+                @test decode(sdec, word) == cw
                 word[1, pos] += F(1)
-                @test decode(dec, word) == cw
+                @test decode(ndec, word) == cw
+                @test decode(sdec, word) == cw
                 if order(F) == 3
                     word[1, pos] += F(1)
-                    @test decode(dec, word) == cw
+                    @test decode(ndec, word) == cw
+                    @test decode(sdec, word) == cw
                 end
                 @test word == cw # in any case
             end

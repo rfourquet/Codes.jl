@@ -142,3 +142,59 @@ function decode(dec::NearestNeighborDecoder, word)
     end
     nearest
 end
+
+
+## SyndromeDecoder
+
+struct SyndromeDecoder{C<:LinearCode,D,M} <: DecoderToCode
+    code::C
+    radius::Int
+    lookup::D
+    checkmat::M
+
+    function SyndromeDecoder(c::LinearCode, radius::Integer)
+        H = check_matrix(c)
+        S = ambient_space(c)
+        T = elem_type(S)
+        lookup = Dict{T,T}()
+        set_syndrome_lookup!(lookup, radius, S, H)
+        new{typeof(c),typeof(lookup),typeof(H)}(c, radius, lookup, H)
+    end
+end
+
+function set_syndrome_lookup!(lookup, radius, S, H)
+    radius < 0 && return
+    z = zero(S)
+    zsyndrome = z * H
+    @assert typeof(zsyndrome) == valtype(lookup) # otherwise, change typeof(lookup)
+    @assert iszero(zsyndrome)
+    push!(lookup, zsyndrome => z)
+
+    F = base_ring(S)
+    elts = collect(Iterators.filter(!iszero, iterator(F)))
+
+    for wei=1:radius
+        # define all non-zero values of errors of weight wei
+        # TODO: don't use Iterators.prod (not compile-friendly)
+        errors_coeffs = Iterators.product(fill(elts, wei)...)
+        for positions in combinations(1:length(z), wei)
+            for error_coeffs in errors_coeffs
+                error = copy(z)
+                # TODO: use array indexing when supported in AA
+                for idx = 1:length(error_coeffs)
+                    error[1, positions[idx]] = error_coeffs[idx]
+                end
+                syndrome = error * H
+                if !haskey(lookup, syndrome)
+                    lookup[syndrome] = error
+                end
+            end
+        end
+    end
+end
+
+function decode(dec::SyndromeDecoder, rw)
+    syndrome = rw * dec.checkmat
+    error = get(dec.lookup, syndrome, nothing)
+    error === nothing ? nothing : rw - error
+end

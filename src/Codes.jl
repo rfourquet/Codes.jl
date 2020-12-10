@@ -1,7 +1,7 @@
 module Codes
 
 export Code, GeneratorCode, LinearCode, RepetitionCode, ParityCheckCode,
-       NearestNeighborDecoder,
+       NearestNeighborDecoder, SyndromeDecoder,
        blocklength, dimension, minimum_distance,
        generator_matrix, systematic_generator_matrix, check_matrix, parity_check_matrix,
        encode, decode, base_field, message_space, ambient_space,
@@ -12,6 +12,8 @@ using AbstractAlgebra: AbstractAlgebra, order, elem_type, right_kernel, left_ker
       matrix, MatrixSpace, base_ring, diagonal_matrix
 
 using InlineTest
+
+using Combinatorics: combinations
 
 using Random: Random, AbstractRNG, shuffle!
 
