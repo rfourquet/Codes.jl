@@ -13,6 +13,9 @@
         @test dimension(C) == 2
         @test blocklength(C) == 3
         @test minimum_distance(C) == 2
+
+        @test rand(C) in C
+        @test all(in(C), rand(rng, C, 10))
     end
 
     for D = (GeneratorCode(F, check_matrix=F[2 1 1]'),
@@ -29,6 +32,9 @@
     @test dimension(E) == 1
     @test blocklength(E) == 3
     @test minimum_distance(E) == 3
+
+    @test rand(E) in E
+    @test all(in(E), rand(rng, E, 10))
 end
 
 @testset "GeneratorCode: iteration" begin

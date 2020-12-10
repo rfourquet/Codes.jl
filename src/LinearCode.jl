@@ -62,6 +62,14 @@ base_field(c::LinearCode) = c.field
 LinearCode(field, genmat::MatrixElem) = GeneratorCode(field, genmat)
 LinearCode(field; check_matrix::MatrixElem) = GeneratorCode(field; check_matrix)
 
+## Random elements
+
+Random.Sampler(::Type{RNG}, c::LinearCode, n::Random.Repetition) where {RNG<:AbstractRNG} =
+    Random.SamplerSimple(c, Random.Sampler(RNG, message_space(c), n))
+
+Random.rand(rng::AbstractRNG, sp::Random.SamplerSimple{<:LinearCode}) =
+    encode(sp[], rand(rng, sp.data))
+
 ## IO
 
 function Base.show(io::IO, c::LinearCode)

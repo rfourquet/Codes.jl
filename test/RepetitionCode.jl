@@ -22,6 +22,9 @@
                                       1 0 0 0 1]
 
     @test collect(C) == [F[0 0 0 0 0], F[1 1 1 1 1]]
+
+    @test rand(C) in C
+    @test all(in(C), rand(rng, C, 10))
 end
 
 @testset "RepetitionCode:encode" begin

@@ -12,6 +12,9 @@
     @test generator_matrix(C) == G
     @test systematic_generator_matrix(C) == G
     @test parity_check_matrix(C) == F[1 1 1 1]
+
+    @test rand(C) in C
+    @test all(in(C), rand(rng, C, 10))
 end
 
 @testset "ParityCheckCode: encode" begin

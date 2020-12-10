@@ -7,6 +7,8 @@ using Codes
 using AbstractAlgebra
 using Random
 
+const rng = MersenneTwister()
+
 include("GeneratorCode.jl")
 include("RepetitionCode.jl")
 include("ParityCheckCode.jl")
