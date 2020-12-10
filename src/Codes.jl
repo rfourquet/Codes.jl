@@ -4,7 +4,8 @@ export Code, GeneratorCode, LinearCode, RepetitionCode, ParityCheckCode,
        NearestNeighborDecoder,
        blocklength, dimension, minimum_distance,
        generator_matrix, systematic_generator_matrix, check_matrix, parity_check_matrix,
-       encode, decode, base_field, message_space
+       encode, decode, base_field, message_space, ambient_space,
+       hamming_weight, hamming_distance
 
 using AbstractAlgebra: AbstractAlgebra, order, elem_type, right_kernel, left_kernel, rref,
       matrix, MatrixSpace, base_ring, diagonal_matrix
