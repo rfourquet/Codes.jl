@@ -11,14 +11,42 @@
     @test_throws ArgumentError ErrorChannel([1.1, 2.2])
 end
 
-@testset "ErrorChannel: transmit" begin
-    for F = (GF(2), GF(5))
-        dim = rand(1:9)
-        S = MatrixSpace(F, 1, dim)
+@testset "Channel: transmit ($F)" for F = (GF(2), GF(5))
+    dim = rand(1:9)
+    S = MatrixSpace(F, 1, dim)
 
-        cw = rand(S)
-        z = zero(S)
+    cw = rand(S)
+    z = zero(S)
 
+    @testset "SymmetricChannel" begin
+        chan = SymmetricChannel(0)
+        @test error_probability(chan) === 0.0
+        @test transmit(chan, cw) == cw
+        @test transmit(chan, z) == z
+
+        chan = SymmetricChannel(1)
+        @test error_probability(chan) === 1.0
+        rw = transmit(chan, cw)
+        for i in eachindex(rw)
+            @test cw[i] != rw[i]
+        end
+        rw = transmit(chan, z)
+        for i in eachindex(rw)
+            @test !iszero(rw[i])
+        end
+
+        # reproducibility
+        perr = rand(Float64)
+        chan = SymmetricChannel(perr)
+        Random.seed!(0)
+        rw = transmit(chan, cw)
+        Random.seed!(0)
+        @test rw == transmit(chan, cw)
+        chan = SymmetricChannel(perr, rng=MersenneTwister(0))
+        @test rw == transmit(chan, cw)
+    end
+
+    @testset "ErrorChannel" begin
         for i = 0:dim
             chan = ErrorChannel(i)
             @test hamming_distance(cw, transmit(chan, cw)) == i

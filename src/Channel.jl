@@ -1,5 +1,11 @@
 abstract type AbstractChannel end
 
+getrng(c::AbstractChannel) = something(c.rng, Random.default_rng())
+
+transmit(chan::AbstractChannel, cw) = transmit!(chan, copy(cw))
+
+##############################################################################
+
 struct ErrorChannel{D,RNG<:Union{AbstractRNG,Nothing}} <: AbstractChannel
     nerrdist::D # distribution yielding the number of errors for a given message
     rng::RNG
@@ -16,8 +22,6 @@ function ErrorChannel(nerrdist; rng::Union{AbstractRNG,Nothing}=nothing)
 end
 
 nerror_distribution(chan::ErrorChannel) = chan.nerrdist
-
-getrng(c::AbstractChannel) = something(c.rng, Random.default_rng())
 
 function transmit!(chan::ErrorChannel, cw)
     rng = getrng(chan)
@@ -47,8 +51,6 @@ function transmit!(chan::ErrorChannel, cw)
     cw
 end
 
-transmit(chan::ErrorChannel, cw) = transmit!(chan, copy(cw))
-
 
 ##############################################################################
 
@@ -56,7 +58,8 @@ struct SymmetricChannel{RNG<:Union{AbstractRNG,Nothing}} <: AbstractChannel
     perr::Float64
     rng::RNG
 
-    function SymmetricChannel(perr::Float64; rng::Union{AbstractRNG,Nothing}=nothing)
+    function SymmetricChannel(perr::Real; rng::Union{AbstractRNG,Nothing}=nothing)
+        perr = Float64(perr)
         0 <= perr <= 1.0 ||
             argerror("error probability `perr` must satisfy `0 <= perr <= 1` (got $perr)")
         new{typeof(rng)}(perr, rng)
@@ -64,3 +67,21 @@ struct SymmetricChannel{RNG<:Union{AbstractRNG,Nothing}} <: AbstractChannel
 end
 
 error_probability(chan::SymmetricChannel) = chan.perr
+
+function transmit!(chan::SymmetricChannel, cw)
+    rng = getrng(chan)
+    Fsp = Random.Sampler(rng, base_ring(cw))
+
+    for idx in eachindex(cw)
+        if rand(rng) < error_probability(chan)
+            while true
+                x = rand(rng, Fsp)
+                if x != cw[idx]
+                    cw[idx] = x
+                    break
+                end
+            end
+        end
+    end
+    cw
+end
