@@ -1,25 +1,27 @@
 abstract type AbstractChannel end
 
 struct ErrorChannel{D,RNG<:Union{AbstractRNG,Nothing}} <: AbstractChannel
-    errdist::D
+    nerrdist::D # distribution yielding the number of errors for a given message
     rng::RNG
     positions::Vector{Int}
 end
 
-function ErrorChannel(errdist; rng::Union{AbstractRNG,Nothing}=nothing)
-    errdist = errdist isa Integer ?
-        (errdist,) :
-        errdist
-    Random.gentype(errdist) <: Integer ||
+function ErrorChannel(nerrdist; rng::Union{AbstractRNG,Nothing}=nothing)
+    nerrdist = nerrdist isa Integer ?
+        (nerrdist,) :
+        nerrdist
+    Random.gentype(nerrdist) <: Integer ||
         throw(ArgumentError("distribution for number of errors must yield integers"))
-    ErrorChannel(errdist, rng, Int[])
+    ErrorChannel(nerrdist, rng, Int[])
 end
+
+nerror_distribution(chan::ErrorChannel) = chan.nerrdist
 
 getrng(c::AbstractChannel) = something(c.rng, Random.default_rng())
 
 function transmit!(chan::ErrorChannel, cw)
     rng = getrng(chan)
-    nerr = rand(rng, chan.errdist)
+    nerr = rand(rng, chan.nerrdist)
     len = length(cw)
     0 <= nerr <= len ||
         error("too many errors ($nerr) for codeword of length $len")

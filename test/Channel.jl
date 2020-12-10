@@ -3,6 +3,12 @@
     @test error_probability(chan) == 0.3
     @test_throws ArgumentError SymmetricChannel(-0.1)
     @test_throws ArgumentError SymmetricChannel(1.1)
+
+    chan = ErrorChannel((1, 2, 3))
+    @test nerror_distribution(chan) == (1, 2, 3)
+    chan = ErrorChannel(3)
+    @test nerror_distribution(chan) == (3,) # might change, but must always yield 3
+    @test_throws ArgumentError ErrorChannel([1.1, 2.2])
 end
 
 @testset "ErrorChannel: transmit" begin
@@ -27,6 +33,11 @@ end
             # passing an explicit RNG
             chan = ErrorChannel(i, rng=MersenneTwister(0))
             @test err == transmit(chan, z)
+
+            # non-Int passed distribution
+            j = rand(0:i)
+            chan = ErrorChannel(j:i)
+            @test hamming_distance(cw, transmit(chan, cw)) ∈ j:i
         end
 
         chan = ErrorChannel(dim+rand(1:9))
