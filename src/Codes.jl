@@ -1,6 +1,6 @@
 module Codes
 
-export Code, GeneratorCode, LinearCode, RepetitionCode, ParityCheckCode,
+export Code, GeneratorCode, LinearCode, RepetitionCode, ParityCheckCode, HammingCode,
        NearestNeighborDecoder, SyndromeDecoder,
        blocklength, dimension, minimum_distance,
        generator_matrix, systematic_generator_matrix, check_matrix, parity_check_matrix,
@@ -9,7 +9,7 @@ export Code, GeneratorCode, LinearCode, RepetitionCode, ParityCheckCode,
        SymmetricChannel, ErrorChannel, transmit, error_probability, nerror_distribution
 
 using AbstractAlgebra: AbstractAlgebra, order, elem_type, right_kernel, left_kernel, rref,
-      matrix, MatrixSpace, base_ring, diagonal_matrix
+      matrix, MatrixSpace, base_ring, diagonal_matrix, zero_matrix
 
 using InlineTest
 
@@ -67,6 +67,7 @@ include("LinearCode.jl")
 include("GeneratorCode.jl")
 include("RepetitionCode.jl")
 include("ParityCheckCode.jl")
+include("HammingCode.jl")
 
 include("Channel.jl")
 
